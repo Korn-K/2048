@@ -18,7 +18,6 @@ public class App {
         myFrame.setSize(380, 500);
         myFrame.setVisible(true);
         myFrame.setResizable(false);
-
         
         Thread gameThread = new GameThread(myFrame);
         Thread timeThread = new TimeThread();

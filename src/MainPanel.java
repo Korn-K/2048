@@ -10,7 +10,6 @@ public class MainPanel extends JPanel implements KeyListener{
     private static int score = 0;
 
     static ArrayList<Tile> tileList = new ArrayList<Tile>();
-    public static Object getTileList;
 
     MainPanel(){
         addKeyListener(this);
@@ -34,9 +33,7 @@ public class MainPanel extends JPanel implements KeyListener{
             }
         }
         score = 0;
-        generate();
-        generate();
-        generate();
+        generate(3);
     }
 
     public static void setScore(int inputScore) {
@@ -66,7 +63,6 @@ public class MainPanel extends JPanel implements KeyListener{
 
     private static void moveUp(){
         // if can merge with upper block do it
-
         for (int colnum=0; colnum<4; colnum++){
             for (int rownum=0; rownum<4; rownum++){
           
@@ -95,15 +91,10 @@ public class MainPanel extends JPanel implements KeyListener{
             }
         }
 
-        MainPanel.tileList.forEach((tile) -> {
-           System.out.print(tile.getLog2Value());
-        });
-        System.out.println();
-
         // if the current tile empty (log2value=0) then move up (loop3 to properly move all tiles)
-        for (int colnum=0; colnum<4; colnum++){
+        for (int colnum = 0; colnum < 4; colnum++){
             for (int rownum=0; rownum<4; rownum++){
-                int index = rownum*4 + colnum;
+                int index = rownum * 4 + colnum;
                 Tile focusTile = tileList.get(index);
                 if (focusTile.getLog2Value() == 0){
                     for (int pairingrownum=rownum+1; pairingrownum<4;pairingrownum++){
@@ -118,7 +109,7 @@ public class MainPanel extends JPanel implements KeyListener{
                     }
                 }
             }
-            System.out.println("no more tiles to move in col"+colnum);
+            // System.out.println("no more tiles to move in col"+colnum);
         }
     }
 
@@ -135,8 +126,14 @@ public class MainPanel extends JPanel implements KeyListener{
         }
     }
 
+    private static void rotate(int iter){
+        for (int i=0; i<iter;i++){
+            rotate();
+        }
+    }
+
+    // generate new cell
     private static void generate(){
-        // generate new cell
         ArrayList<Integer> emptyTileIndices = new ArrayList<Integer>();
         for (int index = 0; index<tileList.size(); index++){
             if (tileList.get(index).getLog2Value()==0) {
@@ -146,6 +143,12 @@ public class MainPanel extends JPanel implements KeyListener{
         Collections.shuffle(emptyTileIndices);
         int randomEmptyTileIndex = emptyTileIndices.get(0);
         tileList.get(randomEmptyTileIndex).setLog2Value(1);
+    }
+
+    private static void generate(int iter){
+        for (int i=0; i<iter; i++){
+            generate();
+        }
     }
 
     private static void Up() {
@@ -159,25 +162,20 @@ public class MainPanel extends JPanel implements KeyListener{
     }
 
     private static void Down() {
-        rotate();
-        rotate();
+        rotate(2);
         Up();
-        rotate();
-        rotate();
+        rotate(2);
     }
+
     private static void Right() {
-        rotate();
-        rotate();
-        rotate();
+        rotate(3);
         Up();
         rotate();
     }
     private static void Left() {
         rotate();
         Up();
-        rotate();
-        rotate();
-        rotate();
+        rotate(3);
     }
 
     @Override
